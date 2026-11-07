@@ -1,9 +1,7 @@
-[README.md](https://github.com/user-attachments/files/31658250/README.md)
 # 🎨 Hand Gesture to Digital Art
 
 An interactive, touchless canvas application that translates real-time hand gestures into dynamic digital art using computer vision, browser-native Web APIs, and high-performance visual rendering engine.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![MediaPipe](https://img.shields.io/badge/MediaPipe-Hands-orange.svg)
 ![HTML5 Canvas](https://img.shields.io/badge/WebGL%2FCanvas-HTML5-green.svg)
 ![Status](https://img.shields.io/badge/status-active-brightgreen.svg)
@@ -20,7 +18,8 @@ An interactive, touchless canvas application that translates real-time hand gest
 - [Quick Start](#-quick-start)
 - [Configuration & Sensitivity](#-configuration--sensitivity)
 - [Project Structure](#-project-structure)
-- [Performance Optimization](#-performance-optimization)
+- [Performance Notes](#-performance-notes)
+- [Camera Privacy](#-camera-privacy)
 - [License](#-license)
 
 ---
@@ -96,15 +95,18 @@ Whether used as an interactive art exhibit, an accessibility tool, or a computer
 ## 🚀 Quick Start
 
 ### Prerequisites
-- A modern web browser supporting WebGL and WebRTC (Chrome, Edge, Firefox, Safari).
-- An integrated or external USB webcam.
+- A modern browser with camera support.
+- An integrated or external webcam.
+- Internet access to load MediaPipe and icon assets from the CDNs referenced in `index.html`.
+
+The browser must be able to request camera permission. Run the page from `http://localhost` or HTTPS, not an arbitrary insecure HTTP host.
 
 ### Installation
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/hand-gesture-art.git
-   cd hand-gesture-art
+   git clone https://github.com/ankitsharma-14/Hand-Gesture-to-Digital-Art.git
+   cd Hand-Gesture-to-Digital-Art
    ```
 
 2. **Serve the project locally:**
@@ -126,53 +128,36 @@ Whether used as an interactive art exhibit, an accessibility tool, or a computer
 
 ## ⚙️ Configuration & Sensitivity
 
-You can adjust tracking sensitivity directly inside `js/config.js` or through the developer console:
+The application is currently a single-page implementation. Its styles, gesture handling, brush rendering, and configuration live inside `index.html`, not in a separate `js/config.js` file.
 
-```javascript
-const CONFIG = {
-  // Distance threshold between index and thumb tip to trigger drawing (in normalized coordinate space)
-  PINCH_THRESHOLD: 0.05,
-  
-  // Smoothing factor for landmark coordinates (0 = raw, 1 = maximum smooth)
-  SMOOTHING_FACTOR: 0.65,
-  
-  // Time threshold (ms) required to trigger clear gesture
-  CLEAR_GESTURE_HOLD_MS: 1500,
-  
-  // Maximum particle lifetime in frame counts
-  PARTICLE_LIFESPAN: 60
-};
-```
+To tune tracking, inspect the script in `index.html`, including the MediaPipe `hands.setOptions({ ... })` call. Its current settings include `maxNumHands: 1`, `modelComplexity: 1`, and minimum detection/tracking confidence values of `0.70`. The interface also offers on-screen controls for drawing behavior.
+
+You can experiment with these values in a local copy and reload the browser. There is no separate build step for this project.
 
 ---
 
 ## 📁 Project Structure
 
-```
-hand-gesture-art/
-├── index.html          # Main HTML entry point & UI overlay layout
-├── css/
-│   └── style.css       # Fullscreen canvas layout, glassmorphism UI overlay
-├── js/
-│   ├── app.js          # Main application initializer & render loop
-│   ├── tracking.js     # MediaPipe pipeline initialization & data processing
-│   ├── gestures.js     # Gesture evaluation logic (Pinch, Open Palm, Fist)
-│   ├── brushes.js      # Rendering routines (Neon, Particle, Rainbow, Ink)
-│   └── config.js       # Global configuration & sensitivity settings
-└── assets/
-    └── icons/          # UI control iconography
-```
+\`\`\`text
+Hand-Gesture-to-Digital-Art/
+├── README.md      # Documentation and local setup
+└── index.html     # Styles, application logic, and browser interface
+\`\`\`
 
 ---
 
-## ⚡ Performance Optimization
+## ⚡ Performance Notes
 
-- **Render Loop:** Employs off-screen canvas buffering to prevent redraw stuttering at high frame rates.
-- **Data Smoothing:** Uses exponential moving averages on landmark coordinates to reduce camera jitter.
-- **Resource Management:** Automatic particle pooling to prevent garbage collection spikes during dense rendering sessions.
+MediaPipe processes webcam frames in the browser, while the canvas renders strokes and effects. Tracking performance depends on browser, device, lighting, and camera frame rate. For smoother drawing, try the available in-app stabilization controls and good lighting.
+
+---
+
+## 🔒 Camera Privacy
+
+The application requests webcam access only after the browser prompts for permission. Processing is browser-side using MediaPipe scripts loaded from CDNs. Review third-party CDN dependencies and browser permissions before using it with sensitive camera feeds.
 
 ---
 
 ## 📜 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+No license file is currently included in this repository. Check with the repository owner before reusing or redistributing code; a badge alone does not grant a software license.
