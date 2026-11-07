@@ -138,11 +138,11 @@ You can experiment with these values in a local copy and reload the browser. The
 
 ## 📁 Project Structure
 
-\`\`\`text
+```text
 Hand-Gesture-to-Digital-Art/
 ├── README.md      # Documentation and local setup
 └── index.html     # Styles, application logic, and browser interface
-\`\`\`
+```
 
 ---
 
